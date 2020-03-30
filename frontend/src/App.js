@@ -1,11 +1,29 @@
 import React from "react";
-import './global.css';
+// import './global.css';
+import { ThemeProvider } from "styled-components";
+import light from "./styles/themes/light";
+import dark from "./styles/themes/dark";
+
+import usePersistedState from "./utils/usePersistedState";
+
+import GlobalStyle from "./styles/global";
 
 import Routes from "./routes";
 
 function App() {
+  const [theme, setTheme] = usePersistedState("theme", light);
+
+  const toggleTheme = () => {
+    setTheme(theme.title === "light" ? dark : light);
+  };
+
   return (
-    <Routes />
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <GlobalStyle />
+        <Routes toggleTheme={toggleTheme} />
+      </div>
+    </ThemeProvider>
   );
 }
 

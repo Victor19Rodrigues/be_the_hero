@@ -1,16 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
+import Switch from "react-switch";
+import { ThemeContext } from "styled-components";
+import { shade } from "polished";
 
 import api from "../../services/api";
 
-import "./styles.css";
+import { Container } from "./styles";
 
 import logoImg from "../../assets/logo.svg";
 import heroesImg from "../../assets/heroes.png";
 
-export default function Logon() {
+export default function Logon({ toggleTheme }) {
   const [id, setId] = useState("");
+  const { colors, title } = useContext(ThemeContext);
+
   const history = useHistory();
 
   async function handleLogon(e) {
@@ -22,14 +27,14 @@ export default function Logon() {
       localStorage.setItem("ongId", id);
       localStorage.setItem("ongName", response.data.name);
 
-      history.push('/profile');
+      history.push("/profile");
     } catch (error) {
       alert("Falha no login, tente novamente");
     }
   }
 
   return (
-    <div className="logon-container">
+    <Container>
       <section className="form">
         <img src={logoImg} alt="Be The Hero" />
 
@@ -51,8 +56,20 @@ export default function Logon() {
           </Link>
         </form>
       </section>
-
-      <img src={heroesImg} alt="Heroes" />
-    </div>
+      <div className="test">
+        <Switch
+          onChange={toggleTheme}
+          checked={title === "dark"}
+          checkedIcon={false}
+          uncheckedIcon={false}
+          height={10}
+          width={40}
+          handleDiameter={20}
+          offColor={shade(0.25, colors.primary)}
+          onColor={colors.secundary}
+        />
+        <img src={heroesImg} alt="Heroes" />
+      </div>
+    </Container>
   );
 }
